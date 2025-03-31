@@ -1,0 +1,71 @@
+<form id="serviceRequestForm">
+    <h2>Solicitud de Estudio de Imagen</h2>
+    
+    <label for="identifier">Identificador único:</label>
+    <input type="text" id="identifier" required>
+    
+    <label for="status">Estado:</label>
+    <select id="status" required>
+        <option value="active">Active</option>
+        <option value="completed">Completed</option>
+        <option value="revoked">Revoked</option>
+    </select>
+    
+    <label for="intent">Propósito:</label>
+    <select id="intent" required>
+        <option value="order">Order</option>
+        <option value="plan">Plan</option>
+        <option value="proposal">Proposal</option>
+    </select>
+    
+    <label for="priority">Prioridad:</label>
+    <select id="priority" required>
+        <option value="routine">Routine</option>
+        <option value="urgent">Urgent</option>
+        <option value="stat">Stat</option>
+    </select>
+    
+    <label for="patientRef">ID del Paciente:</label>
+    <input type="text" id="patientRef" required>
+    
+    <label for="requesterRef">ID del Médico Solicitante:</label>
+    <input type="text" id="requesterRef" required>
+    
+    <label for="code">Código del Procedimiento (SNOMED CT/LOINC):</label>
+    <input type="text" id="code" required>
+    
+    <label for="reasonCode">Razón de la solicitud:</label>
+    <input type="text" id="reasonCode" placeholder="Ej: dolor abdominal">
+    
+    <label for="category">Categoría:</label>
+    <input type="text" id="category">
+    
+    <label for="doNotPerform">No realizar:</label>
+    <input type="checkbox" id="doNotPerform">
+    
+    <label for="occurrence">Fecha/Hora de solicitud:</label>
+    <input type="datetime-local" id="occurrence">
+    
+    <label for="asNeeded">Según necesidad:</label>
+    <input type="text" id="asNeeded">
+    
+    <label for="performer">ID del Ejecutante:</label>
+    <input type="text" id="performer">
+    
+    <label for="location">ID de Ubicación:</label>
+    <input type="text" id="location">
+    
+    <label for="insurance">ID de Seguro:</label>
+    <input type="text" id="insurance">
+    
+    <label for="supportingInfo">Información de apoyo:</label>
+    <input type="text" id="supportingInfo">
+    
+    <label for="bodySite">Sitio corporal:</label>
+    <input type="text" id="bodySite">
+    
+    <label for="note">Notas:</label>
+    <textarea id="note"></textarea>
+    
+    <button type="submit">Enviar Solicitud</button>
+</form>
