@@ -1,71 +1,143 @@
-<form id="serviceRequestForm">
-    <h2>Solicitud de Estudio de Imagen</h2>
-    
-    <label for="identifier">Identificador único:</label>
-    <input type="text" id="identifier" required>
-    
-    <label for="status">Estado:</label>
-    <select id="status" required>
-        <option value="active">Active</option>
-        <option value="completed">Completed</option>
-        <option value="revoked">Revoked</option>
-    </select>
-    
-    <label for="intent">Propósito:</label>
-    <select id="intent" required>
-        <option value="order">Order</option>
-        <option value="plan">Plan</option>
-        <option value="proposal">Proposal</option>
-    </select>
-    
-    <label for="priority">Prioridad:</label>
-    <select id="priority" required>
-        <option value="routine">Routine</option>
-        <option value="urgent">Urgent</option>
-        <option value="stat">Stat</option>
-    </select>
-    
-    <label for="patientRef">ID del Paciente:</label>
-    <input type="text" id="patientRef" required>
-    
-    <label for="requesterRef">ID del Médico Solicitante:</label>
-    <input type="text" id="requesterRef" required>
-    
-    <label for="code">Código del Procedimiento (SNOMED CT/LOINC):</label>
-    <input type="text" id="code" required>
-    
-    <label for="reasonCode">Razón de la solicitud:</label>
-    <input type="text" id="reasonCode" placeholder="Ej: dolor abdominal">
-    
-    <label for="category">Categoría:</label>
-    <input type="text" id="category">
-    
-    <label for="doNotPerform">No realizar:</label>
-    <input type="checkbox" id="doNotPerform">
-    
-    <label for="occurrence">Fecha/Hora de solicitud:</label>
-    <input type="datetime-local" id="occurrence">
-    
-    <label for="asNeeded">Según necesidad:</label>
-    <input type="text" id="asNeeded">
-    
-    <label for="performer">ID del Ejecutante:</label>
-    <input type="text" id="performer">
-    
-    <label for="location">ID de Ubicación:</label>
-    <input type="text" id="location">
-    
-    <label for="insurance">ID de Seguro:</label>
-    <input type="text" id="insurance">
-    
-    <label for="supportingInfo">Información de apoyo:</label>
-    <input type="text" id="supportingInfo">
-    
-    <label for="bodySite">Sitio corporal:</label>
-    <input type="text" id="bodySite">
-    
-    <label for="note">Notas:</label>
-    <textarea id="note"></textarea>
-    
-    <button type="submit">Enviar Solicitud</button>
-</form>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitud de Estudio de Imagen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+            margin: 0;
+            padding-top: 20px;
+            padding-right: 20px;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        label {
+            font-weight: bold;
+            align-self: flex-start;
+            margin-top: 10px;
+        }
+        input, select, textarea {
+            width: 90%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            width: 90%;
+            padding: 10px;
+            background-color: #a6a6ed;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        button:hover {
+            background-color: #8585d6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Solicitud de Estudio de Imagen</h2>
+        <form id="serviceRequestForm">
+            <label for="identifier">Identificador único:</label>
+            <input type="text" id="identifier" required>
+
+            <label for="status">Estado:</label>
+            <select id="status" required>
+                <option value="active">Active</option>
+                <option value="completed">Completed</option>
+                <option value="revoked">Revoked</option>
+            </select>
+
+            <label for="intent">Propósito:</label>
+            <select id="intent" required>
+                <option value="order">Order</option>
+                <option value="plan">Plan</option>
+                <option value="proposal">Proposal</option>
+            </select>
+
+            <label for="priority">Prioridad:</label>
+            <select id="priority" required>
+                <option value="routine">Routine</option>
+                <option value="urgent">Urgent</option>
+                <option value="stat">Stat</option>
+            </select>
+
+            <label for="patientRef">ID del Paciente:</label>
+            <input type="text" id="patientRef" required>
+
+            <label for="requesterRef">ID del Médico Solicitante:</label>
+            <input type="text" id="requesterRef" required>
+
+            <label for="code">Código del Procedimiento (SNOMED CT/LOINC):</label>
+            <input type="text" id="code" required>
+
+            <label for="reasonCode">Razón de la solicitud:</label>
+            <input type="text" id="reasonCode" placeholder="Ej: dolor abdominal">
+
+            <label for="category">Categoría:</label>
+            <input type="text" id="category">
+
+            <label for="doNotPerform">No realizar:</label>
+            <input type="checkbox" id="doNotPerform">
+
+            <label for="occurrence">Fecha/Hora de solicitud:</label>
+            <input type="datetime-local" id="occurrence">
+
+            <label for="asNeeded">Según necesidad:</label>
+            <input type="text" id="asNeeded">
+
+            <label for="performer">ID del Ejecutante:</label>
+            <input type="text" id="performer">
+
+            <label for="location">ID de Ubicación:</label>
+            <input type="text" id="location">
+
+            <label for="insurance">ID de Seguro:</label>
+            <input type="text" id="insurance">
+
+            <label for="supportingInfo">Información de apoyo:</label>
+            <input type="text" id="supportingInfo">
+
+            <label for="bodySite">Sitio corporal:</label>
+            <input type="text" id="bodySite">
+
+            <label for="note">Notas:</label>
+            <textarea id="note"></textarea>
+
+            <button type="submit">Enviar Solicitud</button>
+        </form>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
