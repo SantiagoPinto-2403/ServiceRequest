@@ -1,78 +1,41 @@
 document.getElementById('serviceRequestForm').addEventListener('submit', function(event) {
     event.preventDefault();
 
-    // Obtener los valores del formulario
-    const identifier = document.getElementById('identifier').value;
+    const identifierSystem = document.getElementById('identifierSystem').value;
+    const identifierValue = document.getElementById('identifierValue').value;
     const status = document.getElementById('status').value;
     const intent = document.getElementById('intent').value;
     const priority = document.getElementById('priority').value;
-    const patientRef = document.getElementById('patientRef').value;
-    const requesterRef = document.getElementById('requesterRef').value;
-    const code = document.getElementById('code').value;
+    const subjectReference = document.getElementById('subjectReference').value;
+    const requesterReference = document.getElementById('requesterReference').value;
     const reasonCode = document.getElementById('reasonCode').value;
-    const category = document.getElementById('category').value;
-    const doNotPerform = document.getElementById('doNotPerform').checked;
-    const occurrence = document.getElementById('occurrence').value;
-    const asNeeded = document.getElementById('asNeeded').value;
-    const performer = document.getElementById('performer').value;
-    const location = document.getElementById('location').value;
-    const insurance = document.getElementById('insurance').value;
-    const supportingInfo = document.getElementById('supportingInfo').value;
-    const bodySite = document.getElementById('bodySite').value;
-    const note = document.getElementById('note').value;
+    const reasonText = document.getElementById('reasonText').value;
 
-    // Crear el objeto ServiceRequest en formato FHIR
     const serviceRequest = {
         resourceType: "ServiceRequest",
         identifier: [{
-            value: identifier
+            system: identifierSystem,
+            value: identifierValue
         }],
         status: status,
         intent: intent,
         priority: priority,
         subject: {
-            reference: `Patient/${patientRef}`
+            reference: subjectReference
         },
         requester: {
-            reference: `Practitioner/${requesterRef}`
-        },
-        code: {
-            coding: [{
-                code: code,
-                system: "http://snomed.info/sct" // SNOMED CT como sistema por defecto
-            }]
+            reference: requesterReference
         },
         reasonCode: [{
-            text: reasonCode
-        }],
-        category: [{
-            text: category
-        }],
-        doNotPerform: doNotPerform,
-        occurrenceDateTime: occurrence,
-        asNeededBoolean: asNeeded,
-        performer: [{
-            reference: `Practitioner/${performer}`
-        }],
-        locationReference: [{
-            reference: `Location/${location}`
-        }],
-        insurance: [{
-            reference: `Coverage/${insurance}`
-        }],
-        supportingInfo: [{
-            reference: supportingInfo
-        }],
-        bodySite: [{
-            text: bodySite
-        }],
-        note: [{
-            text: note
+            coding: [{
+                system: "http://terminology.hl7.org/CodeSystem/reason-code",
+                code: reasonCode,
+                display: reasonText
+            }]
         }]
     };
 
-    // Enviar los datos usando Fetch API
-    fetch('https://back-end-santiago.onrender.com/service', {
+    fetch('https://back-end-santiago.onrender.com/servicerequest', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
