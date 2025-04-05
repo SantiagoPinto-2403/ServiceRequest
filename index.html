@@ -1,23 +1,154 @@
-<form id="serviceRequestForm">
-    <input type="text" id="identifierSystem" placeholder="Sistema de identificador">
-    <input type="text" id="identifierValue" placeholder="Valor del identificador">
-    <select id="status">
-        <option value="active">Active</option>
-        <option value="completed">Completed</option>
-    </select>
-    <select id="intent">
-        <option value="order">Order</option>
-    </select>
-    <select id="priority">
-        <option value="routine">Routine</option>
-        <option value="urgent">Urgent</option>
-    </select>
-    <input type="text" id="subjectReference" placeholder="Patient/123">
-    <input type="text" id="encounterReference" placeholder="Encounter/456">
-    <input type="date" id="occurrenceDate">
-    <input type="datetime-local" id="authoredOn">
-    <input type="text" id="requesterReference" placeholder="Practitioner/789">
-    <input type="text" id="performerReference" placeholder="Organization/101">
-    <textarea id="noteText" placeholder="Notas"></textarea>
-    <button type="submit">Enviar</button>
-</form>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitud de Servicio (ServiceRequest)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+            margin: 0;
+            padding-top: 20px;
+            padding-right: 20px;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        form {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        label {
+            font-weight: bold;
+            align-self: flex-start;
+            margin-top: 10px;
+        }
+        input, select, textarea {
+            width: 90%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        textarea {
+            height: 80px;
+            resize: vertical;
+        }
+        button {
+            width: 90%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .form-section {
+            width: 100%;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Solicitud de Servicio Médico</h1>
+        <form id="serviceRequestForm">
+            <div class="form-section">
+                <h3>Identificación</h3>
+                <label for="identifierSystem">Sistema de Identificación:</label>
+                <input type="text" id="identifierSystem" name="identifierSystem" value="http://hospital.sistema/identifiers/requests" readonly>
+                
+                <label for="identifierValue">Número de Solicitud:</label>
+                <input type="text" id="identifierValue" name="identifierValue" placeholder="Ej: LAB20230515-1234" required>
+            </div>
+
+            <div class="form-section">
+                <h3>Estado y Prioridad</h3>
+                <label for="status">Estado:</label>
+                <select id="status" name="status" required>
+                    <option value="draft">Borrador</option>
+                    <option value="active" selected>Activo</option>
+                    <option value="completed">Completado</option>
+                    <option value="cancelled">Cancelado</option>
+                </select>
+
+                <label for="intent">Intención:</label>
+                <select id="intent" name="intent" required>
+                    <option value="order" selected>Orden</option>
+                    <option value="plan">Plan</option>
+                    <option value="proposal">Propuesta</option>
+                </select>
+
+                <label for="priority">Prioridad:</label>
+                <select id="priority" name="priority" required>
+                    <option value="routine" selected>Rutina</option>
+                    <option value="urgent">Urgente</option>
+                    <option value="asap">Lo antes posible</option>
+                    <option value="stat">Inmediato</option>
+                </select>
+            </div>
+
+            <div class="form-section">
+                <h3>Referencias</h3>
+                <label for="subjectReference">Paciente (Referencia):</label>
+                <input type="text" id="subjectReference" name="subjectReference" placeholder="Ej: Patient/12345" required>
+                
+                <label for="encounterReference">Encuentro (Referencia):</label>
+                <input type="text" id="encounterReference" name="encounterReference" placeholder="Ej: Encounter/67890">
+                
+                <label for="requesterReference">Solicitante (Referencia):</label>
+                <input type="text" id="requesterReference" name="requesterReference" placeholder="Ej: Practitioner/54321" required>
+                
+                <label for="performerReference">Realizador (Referencia):</label>
+                <input type="text" id="performerReference" name="performerReference" placeholder="Ej: Organization/98765">
+            </div>
+
+            <div class="form-section">
+                <h3>Fechas</h3>
+                <label for="occurrenceDate">Fecha del Servicio:</label>
+                <input type="date" id="occurrenceDate" name="occurrenceDate" required>
+                
+                <label for="authoredOn">Fecha de Solicitud:</label>
+                <input type="datetime-local" id="authoredOn" name="authoredOn" required>
+            </div>
+
+            <div class="form-section">
+                <h3>Notas</h3>
+                <label for="noteText">Notas Clínicas:</label>
+                <textarea id="noteText" name="noteText" placeholder="Descripción del servicio requerido..."></textarea>
+            </div>
+
+            <button type="submit">Enviar Solicitud</button>
+        </form>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
