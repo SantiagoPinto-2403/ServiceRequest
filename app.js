@@ -9,10 +9,15 @@ document.getElementById('serviceRequestForm').addEventListener('submit', functio
     const subjectReference = document.getElementById('subjectReference').value;
     const encounterReference = document.getElementById('encounterReference').value;
     const occurrenceDate = document.getElementById('occurrenceDate').value;
-    const authoredOn = document.getElementById('authoredOn').value;
+    let authoredOn = document.getElementById('authoredOn').value;
     const requesterReference = document.getElementById('requesterReference').value;
     const performerReference = document.getElementById('performerReference').value;
     const noteText = document.getElementById('noteText').value;
+
+    // Remove time component if present (keep only date part)
+    if (authoredOn) {
+        authoredOn = authoredOn.split('T')[0];
+    }
 
     const serviceRequest = {
         resourceType: "ServiceRequest",
@@ -30,7 +35,7 @@ document.getElementById('serviceRequestForm').addEventListener('submit', functio
             reference: encounterReference
         },
         occurrenceDateTime: occurrenceDate,
-        authoredOn: authoredOn,
+        authoredOn: authoredOn, // Now only contains date without time
         requester: {
             reference: requesterReference
         },
