@@ -7,9 +7,12 @@ document.getElementById('serviceRequestForm').addEventListener('submit', functio
     const intent = document.getElementById('intent').value;
     const priority = document.getElementById('priority').value;
     const subjectReference = document.getElementById('subjectReference').value;
+    const encounterReference = document.getElementById('encounterReference').value;
+    const occurrenceDate = document.getElementById('occurrenceDate').value;
+    const authoredOn = document.getElementById('authoredOn').value;
     const requesterReference = document.getElementById('requesterReference').value;
-    const reasonCode = document.getElementById('reasonCode').value;
-    const reasonText = document.getElementById('reasonText').value;
+    const performerReference = document.getElementById('performerReference').value;
+    const noteText = document.getElementById('noteText').value;
 
     const serviceRequest = {
         resourceType: "ServiceRequest",
@@ -23,15 +26,19 @@ document.getElementById('serviceRequestForm').addEventListener('submit', functio
         subject: {
             reference: subjectReference
         },
+        encounter: {
+            reference: encounterReference
+        },
+        occurrenceDateTime: occurrenceDate,
+        authoredOn: authoredOn,
         requester: {
             reference: requesterReference
         },
-        reasonCode: [{
-            coding: [{
-                system: "http://terminology.hl7.org/CodeSystem/reason-code",
-                code: reasonCode,
-                display: reasonText
-            }]
+        performer: [{
+            reference: performerReference
+        }],
+        note: [{
+            text: noteText
         }]
     };
 

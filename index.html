@@ -1,139 +1,23 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulario de Solicitud de Servicio</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            font-family: 'Segoe UI', sans-serif;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #f4f6f8;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        .form-container {
-            background: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 500px;
-        }
-
-        h2 {
-            text-align: center;
-            margin-bottom: 25px;
-            color: #333;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 16px;
-        }
-
-        label {
-            margin-bottom: 6px;
-            font-weight: 600;
-            color: #444;
-        }
-
-        input,
-        select {
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            font-size: 14px;
-        }
-
-        button {
-            margin-top: 20px;
-            width: 100%;
-            padding: 12px;
-            background-color: #a6a6ed;
-            color: white;
-            font-size: 16px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-    </style>
-</head>
-<body>
-    <form id="serviceRequestForm" class="form-container">
-        <h2>Solicitud de Servicio</h2>
-
-        <div class="form-group">
-            <label for="identifierSystem">Sistema de Identificación:</label>
-            <input type="text" id="identifierSystem" required>
-        </div>
-
-        <div class="form-group">
-            <label for="identifierValue">Valor de Identificación:</label>
-            <input type="text" id="identifierValue" required>
-        </div>
-
-        <div class="form-group">
-            <label for="status">Estado:</label>
-            <select id="status" required>
-                <option value="active">Activo</option>
-                <option value="completed">Completado</option>
-                <option value="cancelled">Cancelado</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="intent">Intención:</label>
-            <select id="intent" required>
-                <option value="order">Orden</option>
-                <option value="proposal">Propuesta</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="priority">Prioridad:</label>
-            <select id="priority" required>
-                <option value="routine">Rutina</option>
-                <option value="urgent">Urgente</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="subjectReference">Referencia del Sujeto:</label>
-            <input type="text" id="subjectReference" required>
-        </div>
-
-        <div class="form-group">
-            <label for="requesterReference">Referencia del Solicitante:</label>
-            <input type="text" id="requesterReference" required>
-        </div>
-
-        <div class="form-group">
-            <label for="reasonCode">Código de Razón:</label>
-            <input type="text" id="reasonCode" required>
-        </div>
-
-        <div class="form-group">
-            <label for="reasonText">Descripción de Razón:</label>
-            <input type="text" id="reasonText" required>
-        </div>
-
-        <button type="submit">Enviar Solicitud</button>
-    </form>
-
-    <script src="app.js"></script>
-</body>
-</html>
+<form id="serviceRequestForm">
+    <input type="text" id="identifierSystem" placeholder="Sistema de identificador">
+    <input type="text" id="identifierValue" placeholder="Valor del identificador">
+    <select id="status">
+        <option value="active">Active</option>
+        <option value="completed">Completed</option>
+    </select>
+    <select id="intent">
+        <option value="order">Order</option>
+    </select>
+    <select id="priority">
+        <option value="routine">Routine</option>
+        <option value="urgent">Urgent</option>
+    </select>
+    <input type="text" id="subjectReference" placeholder="Patient/123">
+    <input type="text" id="encounterReference" placeholder="Encounter/456">
+    <input type="date" id="occurrenceDate">
+    <input type="datetime-local" id="authoredOn">
+    <input type="text" id="requesterReference" placeholder="Practitioner/789">
+    <input type="text" id="performerReference" placeholder="Organization/101">
+    <textarea id="noteText" placeholder="Notas"></textarea>
+    <button type="submit">Enviar</button>
+</form>
