@@ -1,7 +1,6 @@
 document.getElementById('serviceRequestForm').addEventListener('submit', function(event) {
     event.preventDefault();
 
-    const serviceRequestId = document.getElementById('serviceRequestId').value;
     const identifierSystem = document.getElementById('identifierSystem').value;
     const identifierValue = document.getElementById('identifierValue').value;
     const status = document.getElementById('status').value;
@@ -22,7 +21,6 @@ document.getElementById('serviceRequestForm').addEventListener('submit', functio
 
     const serviceRequest = {
         resourceType: "ServiceRequest",
-        id: serviceRequestId,  // Added the id field here
         identifier: [{
             system: identifierSystem,
             value: identifierValue
