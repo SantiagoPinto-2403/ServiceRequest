@@ -148,14 +148,17 @@
             <!-- Patient Info -->
             <div class="form-group">
                 <label class="required-field">Identificación del Paciente</label>
-                <div class="search-container">
-                    <select id="idType" required>
-                        <option value="">Tipo de Documento</option>
+                <div class="id-input-group">
+                    <select id="idType" class="id-type-select" required>
+                        <option value="">Tipo</option>
                         <option value="http://cedula">Cédula</option>
                         <option value="http://pasaporte">Pasaporte</option>
                     </select>
-                    <input type="text" id="idNumber" placeholder="Número" required>
-                    <button type="button" id="searchPatientBtn">Buscar</button>
+                    <input type="text" id="idNumber" class="id-number-input" 
+                           placeholder="Número de documento" required>
+                    <button type="button" id="searchPatientBtn" class="search-patient-btn">
+                        Buscar
+                    </button>
                 </div>
                 <div id="patientInfo" class="patient-info"></div>
             </div>
