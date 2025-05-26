@@ -3,77 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solicitud de Servicio (ServiceRequest)</title>
+    <title>Solicitud de Servicio Médico</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+        /* [Mantén todos tus estilos CSS existentes] */
+        .patient-search {
             display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            height: 100vh;
-            margin: 0;
-            padding-top: 20px;
-            padding-right: 20px;
-        }
-        .container {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
-        }
-        form {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        label {
-            font-weight: bold;
-            align-self: flex-start;
+            gap: 10px;
             margin-top: 10px;
         }
-        input, select, textarea {
-            width: 90%;
+        .patient-search button {
+            width: auto;
+            padding: 8px 12px;
+        }
+        #patientInfo {
+            margin: 10px 0;
             padding: 8px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        textarea {
-            height: 80px;
-            resize: vertical;
-        }
-        button {
-            width: 90%;
-            padding: 10px;
-            background-color: #a6a6ed;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 20px;
-            font-size: 16px;
-        }
-        button:hover {
-            background-color: #8585d6
-        }
-        .form-section {
-            width: 100%;
-            margin-bottom: 15px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
+            background: #f0f8ff;
+            border-radius: 4px;
         }
     </style>
 </head>
@@ -82,53 +28,50 @@
         <h1>Solicitud de Servicio Médico</h1>
         <form id="serviceRequestForm">
             <div class="form-section">
-                <h3>Identificación</h3>
+                <h3>Identificación de Solicitud</h3>
                 <label for="identifierSystem">Sistema de Identificación:</label>
-                <input type="text" id="identifierSystem" name="identifierSystem" value="http://hospital.sistema/identifiers/requests" readonly>
+                <input type="text" id="identifierSystem" name="identifierSystem" value="http://hospital.sistema/solicitudes" readonly>
                 
                 <label for="identifierValue">Número de Solicitud:</label>
-                <input type="text" id="identifierValue" name="identifierValue" placeholder="Ej: LAB20230515-1234" required>
+                <input type="text" id="identifierValue" name="identifierValue" placeholder="Ej: SR-20231125-001" required>
             </div>
 
             <div class="form-section">
-                <h3>Estado y Prioridad</h3>
+                <h3>Información del Paciente</h3>
+                <label for="patientIdentifierSystem">Tipo de Documento:</label>
+                <select id="patientIdentifierSystem" name="patientIdentifierSystem" required>
+                    <option value="">Seleccione...</option>
+                    <option value="http://cedula">Cédula</option>
+                    <option value="http://pasaporte">Pasaporte</option>
+                    <option value="http://tarjeta-identidad">Tarjeta de Identidad</option>
+                </select>
+                
+                <label for="patientIdentifierValue">Número de Documento:</label>
+                <div class="patient-search">
+                    <input type="text" id="patientIdentifierValue" name="patientIdentifierValue" placeholder="Ej: 123456789" required>
+                    <button type="button" onclick="searchPatient()">Buscar</button>
+                </div>
+                <div id="patientInfo"></div>
+            </div>
+
+            <div class="form-section">
+                <h3>Detalles de la Solicitud</h3>
                 <label for="status">Estado:</label>
                 <select id="status" name="status" required>
                     <option value="draft">Borrador</option>
                     <option value="active" selected>Activo</option>
-                    <option value="completed">Completado</option>
-                    <option value="cancelled">Cancelado</option>
                 </select>
 
                 <label for="intent">Intención:</label>
                 <select id="intent" name="intent" required>
                     <option value="order" selected>Orden</option>
-                    <option value="plan">Plan</option>
-                    <option value="proposal">Propuesta</option>
                 </select>
 
                 <label for="priority">Prioridad:</label>
                 <select id="priority" name="priority" required>
                     <option value="routine" selected>Rutina</option>
                     <option value="urgent">Urgente</option>
-                    <option value="asap">Lo antes posible</option>
-                    <option value="stat">Inmediato</option>
                 </select>
-            </div>
-
-            <div class="form-section">
-                <h3>Referencias</h3>
-                <label for="subjectReference">Paciente (Referencia):</label>
-                <input type="text" id="subjectReference" name="subjectReference" placeholder="Ej: Patient/12345" required>
-                
-                <label for="encounterReference">Encuentro (Referencia):</label>
-                <input type="text" id="encounterReference" name="encounterReference" placeholder="Ej: Encounter/67890">
-                
-                <label for="requesterReference">Solicitante (Referencia):</label>
-                <input type="text" id="requesterReference" name="requesterReference" placeholder="Ej: Practitioner/54321" required>
-                
-                <label for="performerReference">Realizador (Referencia):</label>
-                <input type="text" id="performerReference" name="performerReference" placeholder="Ej: Organization/98765">
             </div>
 
             <div class="form-section">
@@ -141,8 +84,17 @@
             </div>
 
             <div class="form-section">
-                <h3>Notas</h3>
-                <label for="noteText">Notas Clínicas:</label>
+                <h3>Personal Médico</h3>
+                <label for="requesterReference">Médico Solicitante (ID):</label>
+                <input type="text" id="requesterReference" name="requesterReference" placeholder="Ej: Practitioner/123" required>
+                
+                <label for="performerReference">Servicio Realizador (ID):</label>
+                <input type="text" id="performerReference" name="performerReference" placeholder="Ej: Organization/456">
+            </div>
+
+            <div class="form-section">
+                <h3>Notas Clínicas</h3>
+                <label for="noteText">Indicaciones:</label>
                 <textarea id="noteText" name="noteText" placeholder="Descripción del servicio requerido..."></textarea>
             </div>
 
@@ -151,4 +103,4 @@
     </div>
     <script src="app.js"></script>
 </body>
-    </html>
+</html>
