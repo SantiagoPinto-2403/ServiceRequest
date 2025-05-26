@@ -3,90 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Solicitud de Servicio</title>
+    <title>Solicitud de Servicio</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
-            padding-top: 20px;
-            padding-right: 20px;
-        }
-        .container {
-            background: white;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        h1 {
-            text-align: center;
             color: #333;
         }
-        form {
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            max-width: 500px;
+            margin-top: 20px;
         }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
         label {
-            font-weight: bold;
-            align-self: flex-start;
-            margin-top: 10px;
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #2c3e50;
         }
+        
+        .required-field::after {
+            content: " *";
+            color: #e74c3c;
+        }
+        
         input, select, textarea {
-            width: 90%;
-            padding: 8px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
         }
+        
         textarea {
-            height: 80px;
+            min-height: 80px;
             resize: vertical;
         }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
         button {
-            width: 90%;
-            padding: 10px;
-            background-color: #a6a6ed;
+            width: 100%;
+            padding: 12px;
+            background-color: #3498db;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
             cursor: pointer;
-            margin-top: 15px;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
+        
         button:hover {
-            background-color: #8585d6;
+            background-color: #2980b9;
         }
+        
+        button:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+        
         .search-container {
             display: flex;
-            width: 90%;
-            gap: 5px;
+            gap: 10px;
         }
+        
         .search-container input {
             flex: 1;
         }
+        
         .search-container button {
             width: auto;
-            padding: 8px 12px;
-            margin-top: 5px;
+            padding: 10px 15px;
         }
+        
         .patient-info {
-            width: 90%;
-            margin: 5px 0;
-            padding: 8px;
+            padding: 10px;
             background-color: #f0f8ff;
-            border-radius: 4px;
-            font-size: 0.9em;
+            border-radius: 6px;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+        
+        .spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -94,54 +139,69 @@
     <div class="container">
         <h1>Solicitud de Servicio</h1>
         <form id="serviceRequestForm">
-            <!-- Identificación de Solicitud -->
-            <label for="identifierValue">Número de Solicitud:</label>
-            <input type="text" id="identifierValue" required>
-            
-            <!-- Información del Paciente -->
-            <label for="patientIdentifierSystem">Tipo de Documento:</label>
-            <select id="patientIdentifierSystem" required>
-                <option value="">Seleccione...</option>
-                <option value="http://cedula">Cédula</option>
-                <option value="http://pasaporte">Pasaporte</option>
-                <option value="http://tarjeta-identidad">Tarjeta de Identidad</option>
-            </select>
-            
-            <label for="patientIdentifierValue">Número de Documento:</label>
-            <div class="search-container">
-                <input type="text" id="patientIdentifierValue" required>
-                <button type="button" id="searchPatientBtn">Buscar</button>
+            <!-- Request Info -->
+            <div class="form-group">
+                <label for="requestIdentifier" class="required-field">Número de Solicitud</label>
+                <input type="text" id="requestIdentifier" required>
             </div>
-            <div id="patientInfo" class="patient-info"></div>
             
-            <!-- Detalles de la Solicitud -->
-            <label for="priority">Prioridad:</label>
-            <select id="priority" required>
-                <option value="routine" selected>Rutina</option>
-                <option value="urgent">Urgente</option>
-            </select>
+            <!-- Patient Info -->
+            <div class="form-group">
+                <label class="required-field">Identificación del Paciente</label>
+                <div class="search-container">
+                    <select id="idType" required>
+                        <option value="">Tipo de Documento</option>
+                        <option value="http://cedula">Cédula</option>
+                        <option value="http://pasaporte">Pasaporte</option>
+                    </select>
+                    <input type="text" id="idNumber" placeholder="Número" required>
+                    <button type="button" id="searchPatientBtn">Buscar</button>
+                </div>
+                <div id="patientInfo" class="patient-info"></div>
+            </div>
             
-            <!-- Fechas -->
-            <label for="occurrenceDate">Fecha del Servicio:</label>
-            <input type="date" id="occurrenceDate" required>
+            <!-- Request Details -->
+            <div class="form-group">
+                <label for="priority" class="required-field">Prioridad</label>
+                <select id="priority" required>
+                    <option value="routine">Rutina</option>
+                    <option value="urgent">Urgente</option>
+                </select>
+            </div>
             
-            <label for="authoredOn">Fecha de Solicitud:</label>
-            <input type="date" id="authoredOn" required>
+            <div class="form-group">
+                <label for="serviceDate" class="required-field">Fecha del Servicio</label>
+                <input type="date" id="serviceDate" required>
+            </div>
             
-            <!-- Personal Médico -->
-            <label for="requesterReference">Médico Solicitante (ID):</label>
-            <input type="text" id="requesterReference" required>
+            <div class="form-group">
+                <label for="requestDate" class="required-field">Fecha de Solicitud</label>
+                <input type="date" id="requestDate" required>
+            </div>
             
-            <label for="performerReference">Servicio Realizador (ID):</label>
-            <input type="text" id="performerReference">
+            <!-- Medical Staff -->
+            <div class="form-group">
+                <label for="requester" class="required-field">Médico Solicitante</label>
+                <input type="text" id="requester" placeholder="ID del profesional" required>
+            </div>
             
-            <!-- Notas Clínicas -->
-            <label for="noteText">Indicaciones:</label>
-            <textarea id="noteText" placeholder="Descripción del servicio requerido..."></textarea>
+            <div class="form-group">
+                <label for="performer">Servicio Ejecutor</label>
+                <input type="text" id="performer" placeholder="ID del servicio">
+            </div>
             
-            <button type="submit">Enviar Solicitud</button>
+            <!-- Clinical Notes -->
+            <div class="form-group">
+                <label for="notes">Notas Clínicas</label>
+                <textarea id="notes" placeholder="Indicaciones para el servicio..."></textarea>
+            </div>
+            
+            <button type="submit" id="submitBtn">
+                <span class="button-text">Registrar Solicitud</span>
+            </button>
         </form>
     </div>
+    
     <script src="app.js"></script>
 </body>
 </html>

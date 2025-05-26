@@ -1,82 +1,114 @@
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('serviceRequestForm');
     const searchBtn = document.getElementById('searchPatientBtn');
+    const submitBtn = document.getElementById('submitBtn');
     
     // Patient search function
     searchBtn.addEventListener('click', async function() {
-        const system = document.getElementById('patientIdentifierSystem').value;
-        const value = document.getElementById('patientIdentifierValue').value;
+        const idType = document.getElementById('idType').value;
+        const idNumber = document.getElementById('idNumber').value.trim();
         
-        if (!system || !value) {
-            alert('Por favor complete ambos campos de identificación');
+        if (!idType || !idNumber) {
+            showAlert('Error', 'Debe seleccionar tipo y número de documento', 'error');
             return;
         }
         
         try {
-            const response = await fetch(`https://back-end-santiago.onrender.com/patient/identifier/${system}/${value}`);
+            searchBtn.disabled = true;
+            searchBtn.innerHTML = '<span class="spinner"></span> Buscando...';
+            
+            const response = await fetch(`https://back-end-santiago.onrender.com/patient/identifier/${idType}/${idNumber}`);
             const data = await response.json();
             
-            if (response.ok) {
-                const patientName = `${data.name[0].given[0]} ${data.name[0].family}`;
-                document.getElementById('patientInfo').textContent = `Paciente encontrado: ${patientName}`;
-            } else {
+            if (!response.ok) {
                 throw new Error(data.detail || 'Paciente no encontrado');
             }
+            
+            const patientName = `${data.name[0].given[0]} ${data.name[0].family}`;
+            document.getElementById('patientInfo').innerHTML = `
+                <strong>Paciente encontrado:</strong> ${patientName}<br>
+                <strong>Documento:</strong> ${idNumber}
+            `;
+            
         } catch (error) {
-            alert(error.message);
+            showAlert('Error', error.message, 'error');
             document.getElementById('patientInfo').textContent = '';
+        } finally {
+            searchBtn.disabled = false;
+            searchBtn.textContent = 'Buscar';
         }
     });
     
     // Form submission
-    form.addEventListener('submit', async function(event) {
-        event.preventDefault();
-        
-        // Get form values
-        const requestData = {
-            identifier: {
-                system: "http://hospital.sistema/solicitudes",
-                value: document.getElementById('identifierValue').value
-            },
-            subject: {
-                identifier: {
-                    system: document.getElementById('patientIdentifierSystem').value,
-                    value: document.getElementById('patientIdentifierValue').value
-                }
-            },
-            priority: document.getElementById('priority').value,
-            occurrenceDateTime: document.getElementById('occurrenceDate').value,
-            authoredOn: document.getElementById('authoredOn').value,
-            requester: {
-                reference: document.getElementById('requesterReference').value
-            },
-            performer: [{
-                reference: document.getElementById('performerReference').value || ''
-            }],
-            note: document.getElementById('noteText').value ? 
-                [{ text: document.getElementById('noteText').value }] : []
-        };
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
         
         try {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="spinner"></span> Procesando...';
+            
+            // Verify patient was found
+            if (!document.getElementById('patientInfo').textContent) {
+                throw new Error('Debe buscar y validar el paciente primero');
+            }
+            
+            // Build request object
+            const requestData = {
+                resourceType: "ServiceRequest",
+                identifier: [{
+                    system: "http://hospital.sistema/solicitudes",
+                    value: document.getElementById('requestIdentifier').value.trim()
+                }],
+                subject: {
+                    identifier: {
+                        system: document.getElementById('idType').value,
+                        value: document.getElementById('idNumber').value.trim()
+                    }
+                },
+                priority: document.getElementById('priority').value,
+                occurrenceDateTime: document.getElementById('serviceDate').value,
+                authoredOn: document.getElementById('requestDate').value,
+                requester: {
+                    reference: document.getElementById('requester').value.trim()
+                },
+                performer: [{
+                    reference: document.getElementById('performer').value.trim() || ''
+                }],
+                note: document.getElementById('notes').value.trim() ? 
+                    [{ text: document.getElementById('notes').value.trim() }] : []
+            };
+            
+            // Submit to backend
             const response = await fetch('https://back-end-santiago.onrender.com/servicerequest', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(requestData)
             });
             
             const data = await response.json();
             
-            if (response.ok) {
-                alert('Solicitud creada exitosamente!');
-                form.reset();
-                document.getElementById('patientInfo').textContent = '';
-            } else {
+            if (!response.ok) {
                 throw new Error(data.detail || 'Error al crear la solicitud');
             }
+            
+            showAlert('Éxito', 'Solicitud registrada correctamente', 'success');
+            form.reset();
+            document.getElementById('patientInfo').textContent = '';
+            
         } catch (error) {
-            alert(`Error: ${error.message}`);
+            showAlert('Error', error.message, 'error');
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<span class="button-text">Registrar Solicitud</span>';
         }
     });
+    
+    // Alert helper function
+    function showAlert(title, text, icon) {
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({ title, text, icon, confirmButtonColor: '#3498db' });
+        } else {
+            alert(`${title}\n\n${text}`);
+        }
+    }
 });
