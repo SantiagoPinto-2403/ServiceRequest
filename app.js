@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
             searchBtn.disabled = true;
             searchBtn.innerHTML = '<span class="spinner"></span> Buscando...';
             
-            const response = await fetch(`https://back-end-santiago.onrender.com/patient/identifier/${idType}/${idNumber}`);
+            const response = await fetch(`https://back-end-santiago.onrender.com/patient?system=${idType}&value=${idNumber}`);
             const data = await response.json();
             
             if (!response.ok) {
