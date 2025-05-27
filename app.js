@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
+        
         try {
             searchBtn.disabled = true;
             searchBtn.innerHTML = '<span class="spinner"></span> Buscando...';
