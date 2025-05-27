@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function() {
             };
             
             // Submit to backend
-            const response = await fetch(`https://back-end-santiago.onrender.com/patient?system=${idType}&value=${idNumber}`, {
+            const response = await fetch('https://back-end-santiago.onrender.com/patient?system=${idType}&value=${idNumber}', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(requestData)
