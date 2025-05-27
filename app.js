@@ -3,6 +3,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchBtn = document.getElementById('searchPatientBtn');
     const submitBtn = document.getElementById('submitBtn');
     
+    // Set default dates
+    document.getElementById('serviceDate').valueAsDate = new Date();
+    document.getElementById('requestDate').valueAsDate = new Date();
+
     // Patient search function
     searchBtn.addEventListener('click', async function() {
         const idType = document.getElementById('idType').value;
@@ -17,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
             searchBtn.disabled = true;
             searchBtn.innerHTML = '<span class="spinner"></span> Buscando...';
             
-            const response = await fetch(`https://back-end-santiago.onrender.com/patient?system=${idType}&value=${idNumber}`);
+            const response = await fetch(`https://back-end-santiago.onrender.com/patient/identifier/${idType}/${idNumber}`);
             const data = await response.json();
             
             if (!response.ok) {
@@ -52,34 +56,36 @@ document.addEventListener('DOMContentLoaded', function() {
                 throw new Error('Debe buscar y validar el paciente primero');
             }
             
-            // Build request object
+            // Build request object with required FHIR fields
             const requestData = {
                 resourceType: "ServiceRequest",
                 identifier: [{
                     system: "http://hospital.sistema/solicitudes",
-                    value: document.getElementById('requestIdentifier').value.trim()
+                    value: document.getElementById('requestIdentifier').value.trim() || `SR-${Date.now()}`
                 }],
+                status: "active",  // Required field (draft|active|completed|cancelled)
+                intent: "order",   // Required field (proposal|plan|order)
                 subject: {
                     identifier: {
                         system: document.getElementById('idType').value,
                         value: document.getElementById('idNumber').value.trim()
                     }
                 },
-                priority: document.getElementById('priority').value,
+                priority: document.getElementById('priority').value || "routine",
                 occurrenceDateTime: document.getElementById('serviceDate').value,
                 authoredOn: document.getElementById('requestDate').value,
                 requester: {
-                    reference: document.getElementById('requester').value.trim()
+                    reference: document.getElementById('requester').value.trim() || "Practitioner/unknown"
                 },
                 performer: [{
-                    reference: document.getElementById('performer').value.trim() || ''
+                    reference: document.getElementById('performer').value.trim() || "Organization/unknown"
                 }],
                 note: document.getElementById('notes').value.trim() ? 
                     [{ text: document.getElementById('notes').value.trim() }] : []
             };
             
             // Submit to backend
-            const response = await fetch('https://back-end-santiago.onrender.com/servicerequest', {
+            const response = await fetch(`https://back-end-santiago.onrender.com/patient?system=${idType}&value=${idNumber}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(requestData)
@@ -94,6 +100,9 @@ document.addEventListener('DOMContentLoaded', function() {
             showAlert('Éxito', 'Solicitud registrada correctamente', 'success');
             form.reset();
             document.getElementById('patientInfo').textContent = '';
+            // Reset dates to today
+            document.getElementById('serviceDate').valueAsDate = new Date();
+            document.getElementById('requestDate').valueAsDate = new Date();
             
         } catch (error) {
             showAlert('Error', error.message, 'error');
@@ -103,10 +112,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Alert helper function
     function showAlert(title, text, icon) {
         if (typeof Swal !== 'undefined') {
-            Swal.fire({ title, text, icon, confirmButtonColor: '#3498db' });
+            Swal.fire({ 
+                title, 
+                text, 
+                icon,
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#3498db'
+            });
         } else {
             alert(`${title}\n\n${text}`);
         }
